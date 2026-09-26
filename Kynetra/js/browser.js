@@ -59,6 +59,16 @@
       return `${prefix}${encodeURIComponent(query)}`;
     }
 
+    ensureSafeUrl(candidate) {
+      try {
+        const parsed = new URL(candidate);
+        if (!['http:', 'https:'].includes(parsed.protocol)) return null;
+        return parsed.toString();
+      } catch {
+        return null;
+      }
+    }
+
     navigate(input, opts = {}) {
       const tab = this.app.tabs.current();
       if (!tab) return;
@@ -68,7 +78,12 @@
         this.renderErrorPage('invalid', parsed.value);
         return;
       }
-      const url = parsed.type === 'search' ? this.toSearchUrl(parsed.value) : parsed.value;
+      const unsafeUrl = parsed.type === 'search' ? this.toSearchUrl(parsed.value) : parsed.value;
+      const url = this.ensureSafeUrl(unsafeUrl);
+      if (!url) {
+        this.renderErrorPage('invalid', parsed.value);
+        return;
+      }
       tab.url = url;
       tab.type = 'web';
       tab.title = parsed.type === 'search' ? `Search: ${parsed.value}` : new URL(url).hostname;
@@ -111,9 +126,10 @@
         blocked: {
           title: "This site doesn't allow embedded viewing.",
           desc: 'Kynetra cannot bypass iframe security policies.',
-          actions: `<button data-action="external" data-url="${data}">Open externally</button><button data-action="retry">Retry</button><button data-action="copy" data-url="${data}">Copy URL</button>`
+          actions: `<button data-action="external">Open externally</button><button data-action="retry">Retry</button><button data-action="copy">Copy URL</button>`
         }
       };
+      this.lastBlockedUrl = data;
       const cfg = map[type] || map.connection;
       this.openInternal('error', { type, ...cfg });
     }

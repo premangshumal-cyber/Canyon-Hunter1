@@ -134,7 +134,7 @@
 
     linkList(items) {
       if (!items.length) return '<small style="color:var(--muted)">No items yet.</small>';
-      return `<ul>${items.map((i) => `<li data-url="${i.url || ''}">${(i.title || i.name || i.url || '').slice(0, 48)}</li>`).join('')}</ul>`;
+      return `<ul>${items.map((i) => `<li data-url="${this.safeAttr(i.url || '')}">${this.escapeHTML((i.title || i.name || i.url || '').slice(0, 48))}</li>`).join('')}</ul>`;
     }
 
     topVisited() {
@@ -148,8 +148,8 @@
 
     historyPage(query) {
       const grouped = this.history.grouped(this.history.search(query));
-      const section = (name, list) => `<h4>${name}</h4>${list.length ? `<ul>${list.map((i) => `<li><span data-url="${i.url}">${i.title}</span> <small>${new Date(i.timestamp).toLocaleString()}</small> <button data-action="history-delete" data-ts="${i.timestamp}">Delete</button> <button data-action="copy-url" data-url="${i.url}">Copy URL</button></li>`).join('')}</ul>` : '<small style="color:var(--muted)">No entries</small>'}`;
-      return `<div><h2>History</h2><div style="display:flex;gap:8px"><input id="historySearch" placeholder="Search history" value="${query}"/><button data-action="history-clear">Clear all history</button></div>${section('Today', grouped.today)}${section('Yesterday', grouped.yesterday)}${section('Previous 7 days', grouped.week)}${section('Older', grouped.older)}</div>`;
+      const section = (name, list) => `<h4>${name}</h4>${list.length ? `<ul>${list.map((i) => `<li><span data-url="${this.safeAttr(i.url)}">${this.escapeHTML(i.title)}</span> <small>${this.escapeHTML(new Date(i.timestamp).toLocaleString())}</small> <button data-action="history-delete" data-ts="${this.safeAttr(i.timestamp)}">Delete</button> <button data-action="copy-url" data-url="${this.safeAttr(i.url)}">Copy URL</button></li>`).join('')}</ul>` : '<small style="color:var(--muted)">No entries</small>'}`;
+      return `<div><h2>History</h2><div style="display:flex;gap:8px"><input id="historySearch" placeholder="Search history" value="${this.safeAttr(query)}"/><button data-action="history-clear">Clear all history</button></div>${section('Today', grouped.today)}${section('Yesterday', grouped.yesterday)}${section('Previous 7 days', grouped.week)}${section('Older', grouped.older)}</div>`;
     }
 
     renderHistoryQuery(query) {
@@ -159,7 +159,7 @@
 
     bookmarksPage(query) {
       const all = query ? this.bookmarks.search(query) : this.bookmarks.allBookmarks();
-      return `<div><h2>Bookmarks</h2><div style="display:flex;gap:8px"><input id="bookmarkSearch" placeholder="Search bookmarks" value="${query}"/><button data-action="bookmark-folder">New folder</button></div><ul>${all.map((b) => `<li><span data-url="${b.url}">${b.title}</span> <button data-action="bookmark-edit" data-id="${b.id}">Edit</button> <button data-action="bookmark-delete" data-id="${b.id}">Delete</button></li>`).join('')}</ul></div>`;
+      return `<div><h2>Bookmarks</h2><div style="display:flex;gap:8px"><input id="bookmarkSearch" placeholder="Search bookmarks" value="${this.safeAttr(query)}"/><button data-action="bookmark-folder">New folder</button></div><ul>${all.map((b) => `<li><span data-url="${this.safeAttr(b.url)}">${this.escapeHTML(b.title)}</span> <button data-action="bookmark-edit" data-id="${this.safeAttr(b.id)}">Edit</button> <button data-action="bookmark-delete" data-id="${this.safeAttr(b.id)}">Delete</button></li>`).join('')}</ul></div>`;
     }
 
     renderBookmarkQuery(query) {
@@ -275,7 +275,12 @@
       } else if (action === 'back') {
         this.tabs.back();
       } else if (action === 'external') {
-        window.open(e.target.dataset.url, '_blank', 'noopener');
+        const url = e.target.dataset.url || this.browser.lastBlockedUrl || '';
+        if (url) window.open(url, '_blank', 'noopener');
+      } else if (action === 'copy') {
+        const url = e.target.dataset.url || this.browser.lastBlockedUrl || '';
+        if (url) navigator.clipboard?.writeText(url);
+        this.toast('URL copied');
       }
     }
 
@@ -445,6 +450,19 @@
       el.textContent = message;
       host.appendChild(el);
       setTimeout(() => el.remove(), 2400);
+    }
+
+    escapeHTML(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    safeAttr(value) {
+      return this.escapeHTML(value).replaceAll('`', '&#96;');
     }
   }
 
