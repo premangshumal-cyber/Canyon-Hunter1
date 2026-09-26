@@ -1,0 +1,55 @@
+.tab-strip-wrap {
+  border-radius: var(--radius);
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tab-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  flex: 1;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 220px;
+  min-width: 134px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  background: color-mix(in oklab, var(--surface) 90%, transparent);
+  transition: all var(--transition);
+  animation: tab-in 160ms ease;
+}
+
+.tab.pinned { min-width: 42px; max-width: 42px; justify-content: center; }
+.tab.active { border-color: var(--accent); background: var(--accent-soft); }
+.tab.dragging { opacity: 0.5; }
+.tab .tab-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.tab .close { opacity: 0; transition: opacity var(--transition); }
+.tab:hover .close, .tab.active .close { opacity: 1; }
+.tab.loading .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  animation: pulse 1s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.4); opacity: 0.5; }
+}
+
+@keyframes tab-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}

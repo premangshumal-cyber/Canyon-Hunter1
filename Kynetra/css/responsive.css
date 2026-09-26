@@ -1,0 +1,19 @@
+@media (max-width: 1080px) {
+  .brand-text { display: none; }
+  .top-bar { grid-template-columns: auto auto 1fr auto; }
+}
+
+@media (max-width: 850px) {
+  .top-bar {
+    grid-template-columns: 1fr;
+  }
+  .nav-controls, .action-controls { justify-content: center; }
+  .browser-view, .internal-view { height: calc(100vh - 230px); }
+  .settings-grid { grid-template-columns: 1fr; }
+  .quick-links { grid-template-columns: repeat(2, minmax(110px, 1fr)); }
+}
+
+@media (max-width: 520px) {
+  .quick-links { grid-template-columns: 1fr; }
+  .downloads-panel { width: calc(100vw - 24px); right: 12px; }
+}

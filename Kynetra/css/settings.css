@@ -1,0 +1,35 @@
+.settings-grid {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 12px;
+  min-height: 100%;
+}
+
+.settings-nav, .settings-panel {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+}
+
+.settings-nav {
+  padding: 10px;
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+
+.settings-nav button,
+.settings-panel button,
+.settings-panel select,
+.settings-panel input {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: color-mix(in oklab, var(--surface) 90%, transparent);
+  padding: 8px 10px;
+}
+
+.settings-nav button.active { border-color: var(--accent); background: var(--accent-soft); }
+
+.settings-panel { padding: 12px; }
+.settings-row { margin-bottom: 12px; display: grid; gap: 6px; }
+.settings-row small { color: var(--muted); }

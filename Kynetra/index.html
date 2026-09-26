@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kynetra — Browse Beyond.</title>
+  <link rel="icon" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/browser.css" />
+  <link rel="stylesheet" href="css/tabs.css" />
+  <link rel="stylesheet" href="css/settings.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <div id="app" class="app theme-dark">
+    <header class="browser-shell">
+      <div class="top-bar glass">
+        <div class="brand" title="Kynetra">
+          <img src="assets/logo.svg" alt="Kynetra" class="brand-logo" />
+          <div class="brand-text">
+            <strong>Kynetra</strong>
+            <span>Browse Beyond.</span>
+          </div>
+        </div>
+        <div class="nav-controls">
+          <button id="backBtn" class="icon-btn" title="Back">←</button>
+          <button id="forwardBtn" class="icon-btn" title="Forward">→</button>
+          <button id="reloadBtn" class="icon-btn" title="Reload">⟳</button>
+          <button id="homeBtn" class="icon-btn" title="Home">⌂</button>
+        </div>
+        <form id="addressForm" class="address-wrap" autocomplete="off">
+          <input id="addressBar" type="text" placeholder="Search or enter address..." />
+        </form>
+        <div class="action-controls">
+          <button id="bookmarkBtn" class="icon-btn" title="Bookmark">☆</button>
+          <button id="downloadBtn" class="icon-btn" title="Downloads">↓</button>
+          <button id="settingsBtn" class="icon-btn" title="Settings">⚙</button>
+          <button id="privateBtn" class="icon-btn" title="New private tab">🕶</button>
+          <button id="profileBtn" class="icon-btn" title="Profile">👤</button>
+        </div>
+      </div>
+
+      <div class="tab-strip-wrap glass">
+        <div id="tabStrip" class="tab-strip" role="tablist"></div>
+        <button id="newTabBtn" class="new-tab-btn" title="New tab">+</button>
+      </div>
+
+      <nav id="bookmarkBar" class="bookmark-bar"></nav>
+    </header>
+
+    <main class="viewport-shell">
+      <div id="findBar" class="find-bar hidden">
+        <input id="findInput" type="text" placeholder="Search page..." />
+        <span id="findCount">0 / 0</span>
+        <button id="findPrevBtn" class="icon-btn">↑</button>
+        <button id="findNextBtn" class="icon-btn">↓</button>
+        <button id="findCloseBtn" class="icon-btn">×</button>
+      </div>
+
+      <section id="internalView" class="internal-view"></section>
+      <iframe id="browserView" class="browser-view hidden" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-downloads"></iframe>
+    </main>
+
+    <aside id="downloadsPanel" class="downloads-panel hidden"></aside>
+
+    <div id="commandPalette" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="modal-card glass">
+        <input id="commandInput" type="text" placeholder="Search Kynetra commands..." />
+        <ul id="commandList"></ul>
+      </div>
+    </div>
+
+    <div id="contextMenu" class="context-menu hidden"></div>
+    <div id="toastHost" class="toast-host"></div>
+  </div>
+
+  <script defer src="js/storage.js"></script>
+  <script defer src="js/history.js"></script>
+  <script defer src="js/bookmarks.js"></script>
+  <script defer src="js/downloads.js"></script>
+  <script defer src="js/settings.js"></script>
+  <script defer src="js/browser.js"></script>
+  <script defer src="js/tabs.js"></script>
+  <script defer src="js/commands.js"></script>
+  <script defer src="js/shortcuts.js"></script>
+  <script defer src="js/app.js"></script>
+</body>
+</html>
